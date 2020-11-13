@@ -586,8 +586,8 @@ HookedWalletSubprovider.prototype.finalizeTx = function(txParams, cb) {
   // so we can atomically consume a nonce
   self.nonceLock.take(function(){
     waterfall([
-      self.fillInTxExtras.bind(self, txParams),
-      self.signTransaction.bind(self),
+      (cb) => self.fillInTxExtras(txParams, cb),
+      (cb) => self.signTransaction(cb),
     ], function(err, signedTx){
       self.nonceLock.leave()
       if (err) return cb(err)
